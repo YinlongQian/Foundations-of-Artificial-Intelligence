@@ -64,6 +64,9 @@ def iterateSearch(alg, search_structure, mansion_graph, goal, nodes_expanded):
             neighbors = mansion_graph.getNeighbors(expand_node)
 
             for neighbor in neighbors:
+                if neighbor.state.room_open != True:
+                    continue
+
                 if neighbor.explored == False and neighbor.queued == False:
                     neighbor.parent = expand_node
                     neighbor.cost = expand_node.cost + 1
@@ -99,6 +102,8 @@ def iterateSearch(alg, search_structure, mansion_graph, goal, nodes_expanded):
             neighbors = mansion_graph.getNeighbors(expand_node)
 
             for neighbor in neighbors:
+                if neighbor.state.room_open != True:
+                    continue
 
                 if neighbor.explored == False and neighbor.queued == False:
                     neighbor.parent = expand_node
@@ -135,6 +140,9 @@ def iterateSearch(alg, search_structure, mansion_graph, goal, nodes_expanded):
             neighbors = mansion_graph.getNeighbors(expand_node)
 
             for neighbor in neighbors:
+                if neighbor.state.room_open != True:
+                    continue
+
                 cost_through_expand_node = expand_node.cost + 1
 
                 if neighbor.explored == False and neighbor.queued == False:
@@ -181,6 +189,9 @@ def iterateSearch(alg, search_structure, mansion_graph, goal, nodes_expanded):
             neighbors = mansion_graph.getNeighbors(expand_node)
 
             for neighbor in neighbors:
+                if neighbor.state.room_open != True:
+                    continue
+
                 cost_through_expand_node = expand_node.cost + 1
 
                 if neighbor.explored == False and neighbor.queued == False:
@@ -227,6 +238,9 @@ def iterateSearch(alg, search_structure, mansion_graph, goal, nodes_expanded):
             neighbors = mansion_graph.getNeighbors(expand_node)
 
             for neighbor in neighbors:
+                if neighbor.state.room_open != True:
+                    continue
+
                 cost_through_expand_node = expand_node.cost + 1
 
                 if neighbor.explored == False and neighbor.queued == False:
@@ -309,7 +323,7 @@ def search(alg, mansion, goal, close_rooms):
 
         search_structure = PriorityQueue()
 
-        mansion_graph.nodes[start.x][start.y].cost = 0.0
+        mansion_graph.nodes[start.x][start.y].cost = 0
         mansion_graph.nodes[start.x][start.y].priority = mansion_graph.nodes[start.x][start.y].cost
         mansion_graph.nodes[start.x][start.y].queued = True
 
@@ -323,7 +337,7 @@ def search(alg, mansion, goal, close_rooms):
 
         search_structure = PriorityQueue()
 
-        mansion_graph.nodes[start.x][start.y].cost = 0.0
+        mansion_graph.nodes[start.x][start.y].cost = 0
         mansion_graph.nodes[start.x][start.y].priority = heuristic(mansion_graph.nodes[start.x][start.y], goal)
         mansion_graph.nodes[start.x][start.y].queued = True
 
@@ -337,7 +351,7 @@ def search(alg, mansion, goal, close_rooms):
 
         search_structure = PriorityQueue()
 
-        mansion_graph.nodes[start.x][start.y].cost = 0.0
+        mansion_graph.nodes[start.x][start.y].cost = 0
         mansion_graph.nodes[start.x][start.y].priority = mansion_graph.nodes[start.x][start.y].cost + heuristic(mansion_graph.nodes[start.x][start.y], goal)
         mansion_graph.nodes[start.x][start.y].queued = True
 
@@ -367,9 +381,71 @@ def search(alg, mansion, goal, close_rooms):
         print(alg + "search algorithm failed")
         return res
 
+
 test_algo = 'A*'
 test_mansion = Mansion(5, 5)
 test_goal = Room(4, 4, True)
 test_closed_room = []
 
-search(test_algo, test_mansion, test_goal, test_closed_room)
+#search(test_algo, test_mansion, test_goal, test_closed_room)
+
+# Strings for the search algorithms
+bfs = 'breadth-first'
+dfs = 'depth-first'
+ucs = 'uniform-cost'
+gpf = 'greedy'
+apf = 'A*'
+
+# Room objects for the rooms
+my_room = Room(0, 0, True)
+kitchen = Room(99, 99, True)
+sun_room = Room(50, 0, True)
+library = Room(25, 75, True)
+
+
+# From my room(0,0) to the kitchen(99,99)
+print("From my room(0,0) to the kitchen(99,99)\n")
+
+bfs_a = search(bfs, mansion, kitchen, [])
+dfs_a = search(dfs, mansion, kitchen, [])
+ucs_a = search(ucs, mansion, kitchen, [])
+gpf_a = search(gpf, mansion, kitchen, [])
+apf_a = search(apf, mansion, kitchen, [])
+
+print("\n" + ("-" * 40) + "\n")
+
+
+# From my room(0,0) to the sun room(50,0)
+print("From my room(0,0) to the sun room(50,0)\n")
+
+bfs_b = search(bfs, mansion, sun_room, [])
+dfs_b = search(dfs, mansion, sun_room, [])
+ucs_b = search(ucs, mansion, sun_room, [])
+gpf_b = search(gpf, mansion, sun_room, [])
+apf_b = search(apf, mansion, sun_room, [])
+
+print("\n" + ("-" * 40) + "\n")
+
+
+# From my room(0,0) to the kitchen(99,99) with closed rooms 1
+print("From my room(0,0) to the kitchen(99,99) with closed rooms 1\n")
+
+bfs_c = search(bfs, mansion, kitchen, closed_rooms1)
+dfs_c = search(dfs, mansion, kitchen, closed_rooms1)
+ucs_c = search(ucs, mansion, kitchen, closed_rooms1)
+gpf_c = search(gpf, mansion, kitchen, closed_rooms1)
+apf_c = search(apf, mansion, kitchen, closed_rooms1)
+
+print("\n" + ("-" * 40) + "\n")
+
+
+# From my room(0,0) to the library(25,75) with closed rooms 2
+print("From my room(0,0) to the library(25,75) with closed rooms 2\n")
+
+bfs_d = search(bfs, mansion, library, closed_rooms2)
+dfs_d = search(dfs, mansion, library, closed_rooms2)
+ucs_d = search(ucs, mansion, library, closed_rooms2)
+gpf_d = search(gpf, mansion, library, closed_rooms2)
+apf_d = search(apf, mansion, library, closed_rooms2)
+
+print("\n" + ("-" * 40) + "\n")
